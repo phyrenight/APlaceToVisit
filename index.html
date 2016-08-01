@@ -3,8 +3,10 @@
   <head>
     <title>Places I want to visit</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script rel="text/javascript" src="/libs/knockout.js"></script>
-    <script rel="text/javascript" src="libs/jsScripts.js"></script>
+    <script rel="text/javascript" src="libs/knockout.js"></script>
+    <script>
+
+    </script>
     <link rel="stylesheet" href="">
     <style>
     #map {
@@ -18,23 +20,14 @@
         <h1>Places I will visit</h1>
     </header>
     <article>
-      <section class="country">
-        <form>
-          <select>
-            <option>Japan</option>
-            <option>Australia</option>
-            <option>California</option>
-            <option>Hawaii</option>
-          </select>
-        </form>
+    <section>
+    <input/>
+      <div data-bind="foreach: spots"class="places">
+        <a href="#" data-bind="text: name"></a>
+      </div>
       </section>
       <div id="map">
       </div>
-      <section class="PlacesToVisit">
-        <h3>Local places I want to visit</h3>
-        <form class="places">
-        </form>
-      </section>
       <section class="details">
         <h3>Details about the place</h3>
         <div>
@@ -43,7 +36,11 @@
     </article>
     <script src="js/lib/jquery.min.js">
     </script>
+    <script>console.log("3rd");</script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTHibygVGMEj52ZJ2O2THkcn93bFc7YHM&callback=initMap">
     </script>
+    <script>console.log("4th")</script>
+    <script rel="text/javascript" src="libs/jsScripts.js"></script>
+    <script>console.log("5th");</script>
   </body>
 </html>
