@@ -1,35 +1,5 @@
 var map, markers = [], marker;
-function displayPlaces(name){
-	var self = this;
-	console.log(typeof name);
-		self.name =  name;
-}
 
-$(document).ready(function() {
-    function JapanPlaces() {
-    	var self = this;
-        self.places = ko.observableArray([
-        	new displayPlaces(places[0]['names']),
-        	new displayPlaces(places[1]['names']),
-        		new displayPlaces(places[2]['names'])]);
-
-     self.query = ko.observable("");
-    	self.spots = ko.computed(function(){
-    		var search = self.query().toLowerCase();
-    	    return ko.utils.arrayFilter(self.places, function(tempplaces){
-                  return places.toLowerCase().indexOf(search) >= 0;
-    	    });
-    	    	//if(places[i].names.toLowerCase().indexOf(search.toLowerCase()) >= 0){
-    	    	//	self.places.push(new displayPlaces(places[i].names));
-    	    	//}
-    	    		//console.log(self.places.length)
-    	    //}	
-    	    
-    });
-    }
-
-ko.applyBindings(new JapanPlaces());
-});
 places = [
               {
 	            names : "Osaka Aquarium Kaiyuan",
@@ -57,7 +27,46 @@ places = [
 	            coords : {lat : 35.6617773,lng : 139.7040506}
               }];
 
-/*function convertToCoords(address){
+/*
+function displayPlaces(name){
+	var self = this;
+	console.log(typeof name);
+		self.name =  name;
+}
+*/
+$(document).ready(function() {
+   /* function JapanPlaces() {
+    	/* var self = this;
+   /*     self.places = ko.observableArray([
+        	new displayPlaces(places[0]['names']),
+        	new displayPlaces(places[1]['names']),
+        		new displayPlaces(places[2]['names'])]);
+*/     var viewModel = {
+             query: ko.observable("")
+        };
+    	viewModel.places = ko.dependentObservable(function(){
+    		var search = this.query().toLowerCase();
+    		console.log(search);
+    	    return ko.utils.arrayFilter(places, function(places){
+    	    	placesArray = places.names.toLowerCase().indexOf(search) >= 0;
+                //makeMapMarker(placesArray)
+                return placesArray
+                //  return places.names.toLowerCase().indexOf(search) >= 0;
+
+    	    });
+    	    	//if(places[i].names.toLowerCase().indexOf(search.toLowerCase()) >= 0){
+    	    	//	self.places.push(new displayPlaces(places[i].names));
+    	    	//}
+    	    		//console.log(self.places.length)
+    	    //}	
+    	    
+    }, viewModel);
+    
+
+ko.applyBindings(viewModel);
+});
+
+function convertToCoords(address){
 	console.log(address)
 	url = "https://maps.googleapis.com/maps/api/geocode/json?address="+address+"&key=AIzaSyBTHibygVGMEj52ZJ2O2THkcn93bFc7YHM";
 
@@ -68,7 +77,7 @@ places = [
         console.log(longi);
         initMap(latt, longi);
     });
-}*/
+}
 
 function initMap(){
       var mapDiv = document.getElementById('map')
@@ -76,7 +85,7 @@ function initMap(){
       center: {lat : 36.204824 ,lng : 138.252924},
       zoom: 6
       });
-   //   makeMapMarker()
+      makeMapMarker()
 }
 
 function makeMapMarker() {
@@ -122,4 +131,4 @@ nyTimesURL += '?' + $.param({"api-key": "b30fd01ee378467091f2076b2edc1c07",
 // add html element              .append("<h1>Ny times can not load data</h1>")
         });*/
 
-// yelp api
+// yelp api 

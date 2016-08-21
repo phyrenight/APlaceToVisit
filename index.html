@@ -22,12 +22,13 @@
     <article>
     <section id="placeMenu">
     <label>Search:</label>
-    <input type="search" placeholder="Search" data-bind="textInput : query"/>
-      <div data-bind="template: { name: 'tempplaces', foreach: spots"id="list">
-        <script type="text/html" id="tempplaces">
-            <a href="#" data-bind="text: name"></a>
+    <input type="search" placeholder="Search" data-bind="value:query, textInput: query"/>
+      <ul data-bind="template: {name:'place', foreach:places}"></ul>
+        <script type="text/html" Id='place'>
+        <li>
+            <a href="#" data-bind="text: names"></a>
+        </li>
         </script>
-      </div>
       </section>
       <div id="map">
       </div>
