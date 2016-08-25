@@ -1,6 +1,6 @@
 var map, markers = [], marker;
 
-places = [
+var places = [
               {
 	            names : "Osaka Aquarium Kaiyuan",
 	            address : "1 Chome-1-10 Kaigandori, Minato Ward, Osaka, Osaka Prefecture 552-0022, Japan",
@@ -25,7 +25,17 @@ places = [
 	            names : "KaiKay",
 	            address :"23-7 Maruyamacho, Shibuya, Tokyo, Japan",
 	            coords : {lat : 35.6617773,lng : 139.7040506}
-              }];
+	          }];
+
+function initMap(){
+      var mapDiv = document.getElementById('map')
+      map = new google.maps.Map(mapDiv, {
+      center: {lat : 36.204824 ,lng : 138.252924},
+      zoom: 6
+      });
+      makeMapMarker(places)
+}
+
 
 /*
 function displayPlaces(name){
@@ -34,38 +44,61 @@ function displayPlaces(name){
 		self.name =  name;
 }
 */
-$(document).ready(function() {
+
    /* function JapanPlaces() {
     	/* var self = this;
    /*     self.places = ko.observableArray([
         	new displayPlaces(places[0]['names']),
         	new displayPlaces(places[1]['names']),
-        		new displayPlaces(places[2]['names'])]);
-*/     var viewModel = {
-             query: ko.observable("")
-        };
-    	viewModel.places = ko.dependentObservable(function(){
+        		new displayPlaces(places[2]['names'])]);*/
+    var viewModel = {
+        query: ko.observable("")
+    };
+    var placesArray = [];
+    viewModel.places = ko.dependentObservable(function(){
+        clearMarkers(null);
+        var i = 0;
+    		console.log("hello");
     		var search = this.query().toLowerCase();
-    		console.log(search);
-    	    return ko.utils.arrayFilter(places, function(places){
-    	    	placesArray = places.names.toLowerCase().indexOf(search) >= 0;
-                //makeMapMarker(placesArray)
-                return placesArray
+    		//console.log(search);
+    	      return ko.utils.arrayFilter(places, function(places){
+    	    	   // placesArray = [];
+               console.log("hhhhhh");
+    	    	    if(places.names.toLowerCase().indexOf(search) >= 0){
+                    placesArray.push(places.names)
+                    console.log(places);
+                   // makeMapMarker(places)
+                    return true;
+                }
+                //console.log(i++);
+                //makeMapMarker(placesArray);
+               // return placesArray
                 //  return places.names.toLowerCase().indexOf(search) >= 0;
-
-    	    });
-    	    	//if(places[i].names.toLowerCase().indexOf(search.toLowerCase()) >= 0){
-    	    	//	self.places.push(new displayPlaces(places[i].names));
-    	    	//}
-    	    		//console.log(self.places.length)
-    	    //}	
-    	    
+        });
+        //makeMapMarker(placesArray)
     }, viewModel);
+
+ //   viewModel.get_details  = function(places){
+ //     console.log(places.names);
+  //  };
     
 
 ko.applyBindings(viewModel);
-});
 
+function get_details(places) {
+  console.log(places.names)
+  if(places.category == "restaurant"){
+    console.log(places.names);
+  }
+  else if(places.category == "anime/manga"){
+     console.log(places.names);
+  }
+  else{
+     console.log(places.names);
+  }
+}
+
+/*
 function convertToCoords(address){
 	console.log(address)
 	url = "https://maps.googleapis.com/maps/api/geocode/json?address="+address+"&key=AIzaSyBTHibygVGMEj52ZJ2O2THkcn93bFc7YHM";
@@ -78,18 +111,10 @@ function convertToCoords(address){
         initMap(latt, longi);
     });
 }
+*/
 
-function initMap(){
-      var mapDiv = document.getElementById('map')
-      map = new google.maps.Map(mapDiv, {
-      center: {lat : 36.204824 ,lng : 138.252924},
-      zoom: 6
-      });
-      makeMapMarker()
-}
-
-function makeMapMarker() {
-
+function makeMapMarker(places) {
+   // console.log("kkkjkkjkjkkkj")
     for(i in places){
         marker = new google.maps.Marker({
         position: places[i].coords,
@@ -113,22 +138,34 @@ function makeMapMarker() {
     marker.setMap(map)
 
 }
+function clearMarkers(maps){
+      for (var i = 0; i < markers.length; i++){
+        //  console.log(i);
+          markers[i].setMap(maps);
+      }
+     // markers = []
+}
+
+
 // apis
 // nytimes api
-nyTimesURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
-nyTimesURL += '?' + $.param({"api-key": "b30fd01ee378467091f2076b2edc1c07",
+function nyTimesApi(){
+  var $details = $('#details');
+  nyTimesURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+  nyTimesURL += '?' + $.param({"api-key": "b30fd01ee378467091f2076b2edc1c07",
                              'q': "Japan"});
-        /*$.getJSON(nyTimeUrl, function(data){
+        $.getJSON(nyTimesURL, function(data){
         	var i = 0;
         	while(i < data['response']['docs'].length){
         		  content = data['response']['docs'][i];
-// add html element        		  .append("<li class=''><a href='"+ content['web_url']+
+        		  $details.append("<li class=''><a href='"+ content['web_url']+
         		  	"'>"+ content['headline']['main']+"</a><p>"
         		  	+content['snippet']+"</p></li>");
         		  i += 1;
         	}
-        })error( function() { 
-// add html element              .append("<h1>Ny times can not load data</h1>")
-        });*/
-
+        }).error( function() { 
+              $details.append("<h1>Ny times can not load data</h1>")
+        });
+}
+nyTimesApi()
 // yelp api 

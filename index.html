@@ -24,9 +24,9 @@
     <label>Search:</label>
     <input type="search" placeholder="Search" data-bind="value:query, textInput: query"/>
       <ul data-bind="template: {name:'place', foreach:places}"></ul>
-        <script type="text/html" Id='place'>
+        <script type="text/html" id='place'>
         <li>
-            <a href="#" data-bind="text: names"></a>
+            <span data-bind="text: names, click: get_details"></span>
         </li>
         </script>
       </section>
@@ -34,7 +34,7 @@
       </div>
       <section class="details">
         <h3>Details about the place</h3>
-        <div>
+        <div id="details">
         </div>
       </section>
     </article>
