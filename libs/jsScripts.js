@@ -167,5 +167,32 @@ function nyTimesApi(){
               $details.append("<h1>Ny times can not load data</h1>")
         });
 }
-nyTimesApi()
+
+function wikiApi(){
+  var place = "Japan"
+  var $details = $('#details');
+  var wikiRequestTimeout = setTimeout(function() {
+    $details.text("failed to get wiki data");
+  }, 8000);
+
+  var wikiURL = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" +
+  place +"&format=json&callback=wikiCallback";
+  $.ajax({
+    url: wikiURL,
+    dataType: 'jsonp',
+    success: function(response) {
+      var articleList = response[1];
+
+      for(var i = 0; i < articleList.length; i++){
+        articleStr = articleList[i];
+        var url = 'http://en.wikipedia.org/wiki/' + articleStr;
+        $details.append('<a href="' + url + '">' + articleStr +
+                         '</a><hr>');
+      };
+      clearTimeout(wikiRequestTimeout);
+    }
+  });
+}
+wikiApi()
+// nyTimesApi()
 // yelp api 
