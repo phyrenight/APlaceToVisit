@@ -32,35 +32,30 @@ var places = [
               category : "shop"
 	          }];
 
-function initMap(){
-    var mapDiv = document.getElementById('map')
-    map = new google.maps.Map(mapDiv, {
-        center: {lat : 36.204824 ,lng : 138.252924},
-        zoom: 6
-    });
-    nyTimesApi();
-    makeMapMarker(places)
-}
 
-var viewModel = {
-    query: ko.observable("")
-};
-var placesArray = [];
+
+var viewModel = function(Map){
+    var self = this;
+    self.query = ko.observable("")
+
 viewModel.places = ko.dependentObservable(function(){
     clearMarkers(null);
-    var search = this.query().toLowerCase();
+    var placesArray = [];
+    var search = self.query().toLowerCase();
     return ko.utils.arrayFilter(places, function(places){
-    	  if(places.names.toLowerCase().indexOf(search) >= 0){
-            placesArray.push(places.names)
-            makeMapMarker(places)
-            return true;
+    	  if (places.names.toLowerCase().indexOf(search) >= 0){
+            placesArray.push(places);
+            Map.makeMapMarker(placesArray);
+            //console.log(placesArray)
+            return placesArray;
         }
     });
 }, viewModel);
-
+};
 
 
 function get_details(places) {
+   // displays content to page based on plaecs.category
     console.log(places.names)
     if(places.category == "shop"){
         console.log(places.names);
@@ -73,7 +68,7 @@ function get_details(places) {
     }
 }
 
-/*
+/* might need to change to ny , so i might need this
 function convertToCoords(address){
 	  console.log(address)
 	  url = "https://maps.googleapis.com/maps/api/geocode/json?address="+address+"&key=AIzaSyBTHibygVGMEj52ZJ2O2THkcn93bFc7YHM";
@@ -88,37 +83,49 @@ function convertToCoords(address){
 }
 */
 
-function makeMapMarker(places) {
-    for(i in places){
-        marker = new google.maps.Marker({
-        position: places[i].coords,
-        map:map,
-        title: places[i].names
+function initMap(){
+    var mapDiv = document.getElementById('map')
+    map = new google.maps.Map(mapDiv, {
+        center: {lat : 36.204824 ,lng : 138.252924},
+        zoom: 6
     });
-    google.maps.event.addListener(marker, 'click', (function(marker, i){
-	      var contentString = "<div>"+ marker.title + "</div>" + 
+    nyTimesApi();
+
+    this.makeMapMarker = function(places) {
+        marker = []
+        for(i in places){
+            console.log(places[i]);
+            marker = new google.maps.Marker({
+            position: places[i].coords,
+            map:map,
+            title: places[i].names
+        });
+        google.maps.event.addListener(marker, 'click', (function(marker, i){
+	          var contentString = "<div>"+ marker.title + "</div>" + 
 	                        "<div>" + places[i].address + "</div>";
-	      var infoWindow = new google.maps.InfoWindow({
-            content : contentString,
-            closeBoxUrl: ""
-    });
-	  infoWindow.content = contentString;
-	  return function(){
+	          var infoWindow = new google.maps.InfoWindow({
+                content : contentString,
+                closeBoxUrl: ""
+            });
+	          infoWindow.content = contentString;
+	          return function(){
 //        get_details(places[i])
-	    	infoWindow.open(map, marker);
+	    	        infoWindow.open(map, marker);
 	          }
         })(marker, i));
-    markers.push(marker);
+        markers.push(marker);
+        }
+        marker.setMap(map)
     }
-    marker.setMap(map)
-
 }
+
+//Map.makeMapMarker(place)
 function clearMarkers(maps){
-      for (var i = 0; i < markers.length; i++){
+    for (var i = 0; i < markers.length; i++){
         //  console.log(i);
-          markers[i].setMap(maps);
-      }
-     // markers = []
+        markers[i].setMap(maps);
+    }
+    // markers = []
 }
 
 // apis
@@ -198,4 +205,9 @@ fourSquareApi()
 //wikiApi()
 // nyTimesApi()
 // yelp api
-ko.applyBindings(viewModel);
+var start = function() {
+
+    var Map = new initMap();
+    var trys = viewModel(Map)
+    ko.applyBindings(trys);
+}
