@@ -5,58 +5,93 @@ var places = [
 	            names : "Osaka Aquarium Kaiyuan",
 	            address : "1 Chome-1-10 Kaigandori, Minato Ward, Osaka, Osaka Prefecture 552-0022, Japan",
               coords : {lat : 34.6550348, lng : 135.4288895},
-              category : "tourist"
+              category : "tourist",
+              yelp_id : ""
               },
               {
 	            names : "Akihabara",
 	            address : "Akihabara, Japan",
 	            coords : { lat : 35.7020691, lng : 139.7753269},
-              category : "shop"
+              category : "tourist",
+              yelp_id : ""
               },
               {
 	            names : "Nijo Castle",
 	            address : "541 Nijojocho, Nakagyo Ward, Kyoto, Kyoto Prefecture 604-8301, Japan",
               coords : { lat : 35.0130361, lng : 135.7503697},
-              category : "tourist"
+              category : "tourist",
+              yelp_id : ""
               },
               {
 	            names : "Shibuya Crossing", // chase seen in fast and furious tokyo drift before Hanso death
 	            address : "2-29-1 Dogenzaka, Shibuya-ku, Tokyo, Japan",
 	            coords : { lat : 35.6595885, lng : 139.6986289},
-              category : "tourist"
+              category : "tourist",
+              yelp_id : ""
               },
               {
 	            names : "KaiKaya",
 	            address :"23-7 Maruyamacho, Shibuya, Tokyo, Japan",
 	            coords : {lat : 35.6617773,lng : 139.7040506},
-              category : "shop"
-	          }];
+              category : "shop",
+              yelp_id : '開花屋-渋谷区'
+	          },
+            {
+              names : "Gamers",
+              address : "1-14-7, Sotokanda, Chiyoda-ku, Tokyo, 101-0021",
+              coords : {lat : 35.69835,lng : 139.7716411},
+              category : "shop",
+              yelp_id : ""
+            },
+            {
+              names : "Ichiran Shibuya",
+              address : "1-22-7 Jinnan Sibuya-ku Tokyo-to 150-0041",
+              coords : {lat : 35.6665006,lng : 139.6975192},
+              category : "shop",
+              yelp_id : ""
+            }];
 
-
+function local(dataObj){
+  var self = this;
+    self.names = dataObj['names'];
+    self.address = dataObj['address'];
+    self.coords = dataObj.coords
+    self.category = dataObj['category'];
+}
 
 var viewModel = function(Map){
     var self = this;
     self.query = ko.observable("")
 
-viewModel.places = ko.dependentObservable(function(){
+    self.allPlaces = ko.observableArray();
+    places.forEach(function(place){
+        self.allPlaces.push(new local(place))
+    });
+
+    self.showPlaces = ko.computed(function(){
     clearMarkers(null);
     var placesArray = [];
     var search = self.query().toLowerCase();
-    return ko.utils.arrayFilter(places, function(places){
-    	  if (places.names.toLowerCase().indexOf(search) >= 0){
-            placesArray.push(places);
-            Map.makeMapMarker(placesArray);
-            //console.log(placesArray)
-            return placesArray;
-        }
+    var newArray = ko.utils.arrayFilter(self.allPlaces(), function(item){
+      console.log(item)
+      var d = item.names.toLowerCase().indexOf(search) >= 0;
+      console.log(d);
+      if(item.names.toLowerCase().indexOf(search) > -1){
+          console.log(item.names.toLowerCase().indexOf(search));
+          var value = true
+          placesArray.push(item);
+          Map.makeMapMarker(placesArray)
+          return value;
+       }
     });
+    return newArray;
 }, viewModel);
 };
 
 
 function get_details(places) {
-   // displays content to page based on plaecs.category
-    console.log(places.names)
+   // displays content to page based on places.category
+  //  console.log(places.names)
     if(places.category == "shop"){
         console.log(places.names);
     }
@@ -67,8 +102,8 @@ function get_details(places) {
         nyTimesApi();
     }
 }
-
-/* might need to change to ny , so i might need this
+/*
+ //might need to change to ny , so i might need this
 function convertToCoords(address){
 	  console.log(address)
 	  url = "https://maps.googleapis.com/maps/api/geocode/json?address="+address+"&key=AIzaSyBTHibygVGMEj52ZJ2O2THkcn93bFc7YHM";
@@ -94,7 +129,7 @@ function initMap(){
     this.makeMapMarker = function(places) {
         marker = []
         for(i in places){
-            console.log(places[i]);
+    //        console.log(places[i]);
             marker = new google.maps.Marker({
             position: places[i].coords,
             map:map,
@@ -137,6 +172,7 @@ function nyTimesApi(){
                              'q': "Japan"});
         $.getJSON(nyTimesURL, function(data){
         	var i = 0;
+          $details.empty().append();
         	while(i < data['response']['docs'].length){
         		  content = data['response']['docs'][i];
         		  $details.append("<li class=''><a href='"+ content['web_url']+
@@ -149,6 +185,7 @@ function nyTimesApi(){
         });
 }
 
+//wikipedia
 function wikiApi(places){
   var place = places.names
   var $details = $('#details');
@@ -167,7 +204,7 @@ function wikiApi(places){
       for(var i = 0; i < articleList.length; i++){
         articleStr = articleList[i];
         var url = 'http://en.wikipedia.org/wiki/' + articleStr;
-        $details.append('<a href="' + url + '">' + articleStr +
+        $details.empty().append('<a href="' + url + '">' + articleStr +
                          '</a><hr>');
       };
       clearTimeout(wikiRequestTimeout);
@@ -201,10 +238,15 @@ function fourSquareApi(){
    // })
     })
 }
-fourSquareApi()
+function yelpApi() {
+
+}
+//fourSquareApi()
 //wikiApi()
 // nyTimesApi()
 // yelp api
+
+
 var start = function() {
 
     var Map = new initMap();

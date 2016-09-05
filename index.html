@@ -2,12 +2,11 @@
 <html lang="en">
   <head>
     <title>Places I want to visit</title>
+    <link rel="text/css" src="css/styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script rel="text/javascript" src="libs/knockout.js"></script>
-    <script>
 
     </script>
-    <link rel="stylesheet" href="">
     <style>
     #map {
     	width: 100%;
@@ -18,18 +17,23 @@
   <body>
     <header>
         <h1>Places I will visit</h1>
+        <button class="hamburger">&#9776;</button>
+        <button class="cross">&#735;</button>
     </header>
     <article>
     <section id="placeMenu">
-    <label>Search:</label>
-    <input type="search" placeholder="Search" data-bind="value:query, textInput: query"/>
-      <ul data-bind="template: {name:'place', foreach:places}"></ul>
-        <script type="text/html" id='place'>
-        <li>
-            <span data-bind="text: names, click: get_details"></span>
-        </li>
-        </script>
-      </section>
+        <label>Search:</label>
+        <input type="search" placeholder="Search" data-bind="value:query, textInput: query"/>
+      <!--<section data-bind="foreach: allPlaces">
+        <p data-bind="text: names"></p>
+      </section>-->
+        <ul data-bind="template: {name:'place', foreach:showPlaces}"></ul>
+            <script type="text/html" id='place'>
+                <li>
+                    <span data-bind="text: names, click: get_details"></span>
+                </li>
+            </script>
+    </section>
       <div id="map">
       </div>
       <section class="details">
@@ -41,5 +45,6 @@
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTHibygVGMEj52ZJ2O2THkcn93bFc7YHM&callback=start">
     </script>
     <script rel="text/javascript" src="libs/jsScripts.js"></script>
+        <script rel="text/javascript" src="libs/hamburgerMenu.js"></script>
   </body>
 </html>
