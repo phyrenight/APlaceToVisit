@@ -133,8 +133,11 @@ function initMap(){
             marker = new google.maps.Marker({
             position: places[i].coords,
             map:map,
+            animation: google.maps.Animation.Bounce,
             title: places[i].names
         });
+        //marker.addListener('click', toggleBounce)
+
         google.maps.event.addListener(marker, 'click', (function(marker, i){
 	          var contentString = "<div>"+ marker.title + "</div>" + 
 	                        "<div>" + places[i].address + "</div>";
@@ -142,16 +145,30 @@ function initMap(){
                 content : contentString,
                 closeBoxUrl: ""
             });
+           // marker.clicky = google.maps.event.addListener(marker, 'click', toggleBounce);
+           // marker.addListener('click', toggleBounce)
 	          infoWindow.content = contentString;
 	          return function(){
-//        get_details(places[i])
+//              get_details(places[i])
+                infoWindow.close()
 	    	        infoWindow.open(map, marker);
-	          }
+
+            }
         })(marker, i));
         markers.push(marker);
-        }
+        markers[i].clicky = google.maps.event.addListener(markers[i], 'click', toggleBounce);
+        } 
         marker.setMap(map)
     }
+    toggleBounce = function(marker){
+      console.log("hello")
+        if (marker.getAnimation() !== null){
+            marker.setAnimation(null);
+        }else{
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+   }
+
 }
 
 //Map.makeMapMarker(place)
@@ -233,13 +250,22 @@ function fourSquareApi(){
     var venue_id = data['response']['venues'][0]['id']
     console.log(venue_id);
     var FQMenuURL = "https://api.foursquare.com/v2/venues/" + venue_id + "/menu"
-    //$.getJSON(FQMenuURL, function(getmenu){
-    //  console.log(getmenu)
-   // })
+    
+    var redirect = "https://localhost:8000"
+    fourvenue = "https://foursquare.com/v2/venues/"+venue_id;//"?client_id="+
+                //CLIENTID + "&response_type=JSON&redirect_uri="+ redirect;
+    $.getJSON(fourvenue, function(getmenu){
+      console.log(getmenu)
+     })
     })
 }
-function yelpApi() {
 
+function nonce_generate() {
+    return (Math.floor(Math.random() * 1e12).toString());
+}
+
+function yelpApi() {
+    var yelpURL;
 }
 //fourSquareApi()
 //wikiApi()

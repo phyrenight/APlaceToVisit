@@ -1,0 +1,121 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/nodejs',
+1 verbose cli   '/usr/bin/npm',
+1 verbose cli   'i',
+1 verbose cli   '--save',
+1 verbose cli   '@zalando/oauth2-client-js' ]
+2 info using npm@1.4.21
+3 info using node@v0.10.25
+4 verbose cache add [ '@zalando/oauth2-client-js', null ]
+5 verbose cache add name=undefined spec="@zalando/oauth2-client-js" args=["@zalando/oauth2-client-js",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: '@zalando/oauth2-client-js',
+6 verbose parsed url   path: '@zalando/oauth2-client-js',
+6 verbose parsed url   href: '@zalando/oauth2-client-js' }
+7 verbose cache add name="" spec="zalando/oauth2-client-js" args=["","zalando/oauth2-client-js"]
+8 verbose parsed url { protocol: null,
+8 verbose parsed url   slashes: null,
+8 verbose parsed url   auth: null,
+8 verbose parsed url   host: null,
+8 verbose parsed url   port: null,
+8 verbose parsed url   hostname: null,
+8 verbose parsed url   hash: null,
+8 verbose parsed url   search: null,
+8 verbose parsed url   query: null,
+8 verbose parsed url   pathname: 'zalando/oauth2-client-js',
+8 verbose parsed url   path: 'zalando/oauth2-client-js',
+8 verbose parsed url   href: 'zalando/oauth2-client-js' }
+9 silly lockFile 305ce3f6-zalando-oauth2-client-js zalando/oauth2-client-js
+10 verbose lock zalando/oauth2-client-js /home/phyrenight/.npm/305ce3f6-zalando-oauth2-client-js.lock
+11 info maybeGithub Attempting zalando/oauth2-client-js from git://github.com/zalando/oauth2-client-js
+12 silly lockFile 33c4e940-hub-com-zalando-oauth2-client-js git://github.com/zalando/oauth2-client-js
+13 verbose lock git://github.com/zalando/oauth2-client-js /home/phyrenight/.npm/33c4e940-hub-com-zalando-oauth2-client-js.lock
+14 verbose addRemoteGit [ 'git://github.com/zalando/oauth2-client-js', 'master' ]
+15 verbose git clone git://github.com/zalando/oauth2-client-js Cloning into bare repository '/home/phyrenight/.npm/_git-remotes/git-github-com-zalando-oauth2-client-js-33c4e940'...
+16 verbose git fetch -a origin (git://github.com/zalando/oauth2-client-js)
+17 verbose git rev-list -n1 master 46b69bc5c954200411886b9056bb486a350b6fc7
+18 verbose resolved git url git://github.com/zalando/oauth2-client-js#46b69bc5c954200411886b9056bb486a350b6fc7
+19 verbose tar unpack /tmp/npm-32052-KT50wojy/1473269597260-0.13937265379354358/tmp.tgz
+20 silly lockFile c3abcbcb-13937265379354358-tmp-tgz-unpack tar:///tmp/npm-32052-KT50wojy/1473269597260-0.13937265379354358/tmp.tgz-unpack
+21 verbose lock tar:///tmp/npm-32052-KT50wojy/1473269597260-0.13937265379354358/tmp.tgz-unpack /home/phyrenight/.npm/c3abcbcb-13937265379354358-tmp-tgz-unpack.lock
+22 silly lockFile ad534708-7260-0-13937265379354358-tmp-tgz tar:///tmp/npm-32052-KT50wojy/1473269597260-0.13937265379354358/tmp.tgz
+23 verbose lock tar:///tmp/npm-32052-KT50wojy/1473269597260-0.13937265379354358/tmp.tgz /home/phyrenight/.npm/ad534708-7260-0-13937265379354358-tmp-tgz.lock
+24 silly gunzTarPerm modes [ '775', '664' ]
+25 silly gunzTarPerm extractEntry
+26 silly gunzTarPerm extractEntry .eslintrc
+27 silly gunzTarPerm extractEntry .gitignore
+28 silly gunzTarPerm extractEntry .travis.yml
+29 silly gunzTarPerm extractEntry LICENSE
+30 silly gunzTarPerm extractEntry MAINTAINERS
+31 silly gunzTarPerm extractEntry README.md
+32 silly gunzTarPerm extractEntry banner.js
+33 silly gunzTarPerm extractEntry bower.json
+34 silly gunzTarPerm extractEntry dist/
+35 silly gunzTarPerm extractEntry dist/oauth2-client.js
+36 silly gunzTarPerm extractEntry oauth.js
+37 silly gunzTarPerm extractEntry package.json
+38 silly gunzTarPerm extractEntry publish.sh
+39 silly gunzTarPerm extractEntry release.sh
+40 silly gunzTarPerm extractEntry src/
+41 silly gunzTarPerm extractEntry src/error.js
+42 silly gunzTarPerm extractEntry src/provider.js
+43 silly gunzTarPerm extractEntry src/refresh.js
+44 silly gunzTarPerm extractEntry src/request.js
+45 silly gunzTarPerm extractEntry src/response.js
+46 silly gunzTarPerm extractEntry src/storage/
+47 silly gunzTarPerm extractEntry src/storage/local-storage.js
+48 silly gunzTarPerm extractEntry src/storage/memory-storage.js
+49 silly gunzTarPerm extractEntry src/storage/storage.js
+50 silly gunzTarPerm extractEntry src/util.js
+51 silly gunzTarPerm extractEntry test/
+52 silly gunzTarPerm extractEntry test/chai.js
+53 silly gunzTarPerm extractEntry test/error.test.js
+54 silly gunzTarPerm extractEntry test/local-storage.test.js
+55 silly gunzTarPerm extractEntry test/provider.test.js
+56 silly gunzTarPerm extractEntry test/refresh.test.js
+57 silly gunzTarPerm extractEntry test/request.test.js
+58 silly gunzTarPerm extractEntry test/response.test.js
+59 silly gunzTarPerm extractEntry test/util.test.js
+60 silly gunzTarPerm extractEntry webpack.config.js
+61 silly lockFile c3abcbcb-13937265379354358-tmp-tgz-unpack tar:///tmp/npm-32052-KT50wojy/1473269597260-0.13937265379354358/tmp.tgz-unpack
+62 silly lockFile c3abcbcb-13937265379354358-tmp-tgz-unpack tar:///tmp/npm-32052-KT50wojy/1473269597260-0.13937265379354358/tmp.tgz-unpack
+63 silly lockFile ad534708-7260-0-13937265379354358-tmp-tgz tar:///tmp/npm-32052-KT50wojy/1473269597260-0.13937265379354358/tmp.tgz
+64 silly lockFile ad534708-7260-0-13937265379354358-tmp-tgz tar:///tmp/npm-32052-KT50wojy/1473269597260-0.13937265379354358/tmp.tgz
+65 silly lockFile 33c4e940-hub-com-zalando-oauth2-client-js git://github.com/zalando/oauth2-client-js
+66 silly lockFile 33c4e940-hub-com-zalando-oauth2-client-js git://github.com/zalando/oauth2-client-js
+67 info maybeGithub Attempting zalando/oauth2-client-js from git+ssh://git@github.com:zalando/oauth2-client-js
+68 silly lockFile e71cad49-hub-com-zalando-oauth2-client-js git@github.com:zalando/oauth2-client-js
+69 verbose lock git@github.com:zalando/oauth2-client-js /home/phyrenight/.npm/e71cad49-hub-com-zalando-oauth2-client-js.lock
+70 verbose addRemoteGit [ 'git@github.com:zalando/oauth2-client-js', 'master' ]
+71 error git clone git@github.com:zalando/oauth2-client-js Cloning into bare repository '/home/phyrenight/.npm/_git-remotes/git-github-com-zalando-oauth2-client-js-e71cad49'...
+71 error git clone git@github.com:zalando/oauth2-client-js Host key verification failed.
+71 error git clone git@github.com:zalando/oauth2-client-js fatal: Could not read from remote repository.
+71 error git clone git@github.com:zalando/oauth2-client-js
+71 error git clone git@github.com:zalando/oauth2-client-js Please make sure you have the correct access rights
+71 error git clone git@github.com:zalando/oauth2-client-js and the repository exists.
+72 silly lockFile e71cad49-hub-com-zalando-oauth2-client-js git@github.com:zalando/oauth2-client-js
+73 silly lockFile e71cad49-hub-com-zalando-oauth2-client-js git@github.com:zalando/oauth2-client-js
+74 silly lockFile 305ce3f6-zalando-oauth2-client-js zalando/oauth2-client-js
+75 silly lockFile 305ce3f6-zalando-oauth2-client-js zalando/oauth2-client-js
+76 error addLocal Could not install zalando/oauth2-client-js
+77 error Error: ENOENT, stat 'zalando/oauth2-client-js'
+78 error If you need help, you may report this *entire* log,
+78 error including the npm and node versions, at:
+78 error     <http://github.com/npm/npm/issues>
+79 error System Linux 4.2.0-36-generic
+80 error command "/usr/bin/nodejs" "/usr/bin/npm" "i" "--save" "@zalando/oauth2-client-js"
+81 error cwd /home/phyrenight/programming/udacity/fullstack-nanodegree-vm/vagrant/places to visit
+82 error node -v v0.10.25
+83 error npm -v 1.4.21
+84 error path zalando/oauth2-client-js
+85 error code ENOENT
+86 error errno 34
+87 verbose exit [ 34, true ]
