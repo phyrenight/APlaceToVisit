@@ -145,29 +145,32 @@ function initMap(){
                 content : contentString,
                 closeBoxUrl: ""
             });
-           // marker.clicky = google.maps.event.addListener(marker, 'click', toggleBounce);
+          //  marker.clicky = google.maps.event.addListener(marker, 'click', toggleBounce);
            // marker.addListener('click', toggleBounce)
 	          infoWindow.content = contentString;
 	          return function(){
 //              get_details(places[i])
-                infoWindow.close()
 	    	        infoWindow.open(map, marker);
-
+                if(marker.getAnimation() != null){
+                  marker.setAnimation(null);
+                }else{
+                  marker.setAnimation(google.maps.Animation.BOUNCE);
+                }
             }
         })(marker, i));
         markers.push(marker);
-        markers[i].clicky = google.maps.event.addListener(markers[i], 'click', toggleBounce);
+       // markers[i].clicky = google.maps.event.addListener(markers[i], 'click', toggleBounce);
         } 
         marker.setMap(map)
     }
-    toggleBounce = function(marker){
+  /*  toggleBounce = function(){
       console.log("hello")
         if (marker.getAnimation() !== null){
             marker.setAnimation(null);
         }else{
             marker.setAnimation(google.maps.Animation.BOUNCE);
         }
-   }
+   }*/
 
 }
 
