@@ -151,6 +151,7 @@ function initMap(){
 	          return function(){
 //              get_details(places[i])
 	    	        infoWindow.open(map, marker);
+                // makes markers bounce on/off
                 if(marker.getAnimation() != null){
                   marker.setAnimation(null);
                 }else{
@@ -268,12 +269,46 @@ function nonce_generate() {
 }
 
 function yelpApi() {
-    var yelpURL;
+    var yelp_consumer_key = "XPx515zsSylsRxPZZ2K5tg";
+    var yelp_consumer_secret = "EsQ9fql9IL4XhxOijpP92o7Q92A";
+    var yelp_token = "xN3TgEhTbYzWjk7g7wCz-U7is484UWoy";
+    var yelp_token_secret = "KSQPTAe4BkIe4TXlrS_6Suf6TGk";
+    var yelpURL  = "https://api.yelp.com/v2/search?";
+
+    parameters = {
+      term: 'Kaikaya',
+      location: 'japan',
+      oauth_consumer_key : yelp_consumer_key,
+      oauth_token : yelp_token,
+      oauth_signature_method : "HMAC-SHA1",
+      oauth_timestamp : Math.floor(Date.now()/1000),
+      oauth_nonce : nonce_generate(),
+      oauth_version: "1.0",
+      callback: "cb"
+    }
+    var EncodeSignature = oauthSignature.generate('GET', yelpURL, parameters, yelp_consumer_secret, yelp_token_secret);
+    parameters.oauth_signature = EncodeSignature;  
+    console.log(EncodeSignature)
+    var setting = {
+    url: yelpURL,
+    data:parameters,
+    cache: true,
+    dataType: 'jsonp',
+    jsonCallback: 'cb',
+    success: function(data){
+      console.log(data.businesses[0])
+      console.log("success")
+    },
+    error: function(error){
+      console.log(error);
+    }
+   }
+   $.ajax(setting);
 }
 //fourSquareApi()
 //wikiApi()
 // nyTimesApi()
-// yelp api
+ yelpApi()
 
 
 var start = function() {
