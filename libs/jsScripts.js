@@ -6,49 +6,42 @@ var places = [
 	            address : "1 Chome-1-10 Kaigandori, Minato Ward, Osaka, Osaka Prefecture 552-0022, Japan",
               coords : {lat : 34.6550348, lng : 135.4288895},
               category : "tourist",
-              yelp_id : ""
               },
               {
 	            names : "Akihabara",
 	            address : "Akihabara, Japan",
 	            coords : { lat : 35.7020691, lng : 139.7753269},
               category : "tourist",
-              yelp_id : ""
               },
               {
 	            names : "Nijo Castle",
 	            address : "541 Nijojocho, Nakagyo Ward, Kyoto, Kyoto Prefecture 604-8301, Japan",
               coords : { lat : 35.0130361, lng : 135.7503697},
               category : "tourist",
-              yelp_id : ""
               },
               {
 	            names : "Shibuya Crossing", // chase seen in fast and furious tokyo drift before Hanso death
 	            address : "2-29-1 Dogenzaka, Shibuya-ku, Tokyo, Japan",
 	            coords : { lat : 35.6595885, lng : 139.6986289},
               category : "tourist",
-              yelp_id : ""
               },
               {
 	            names : "KaiKaya",
 	            address :"23-7 Maruyamacho, Shibuya, Tokyo, Japan",
 	            coords : {lat : 35.6617773,lng : 139.7040506},
               category : "shop",
-              yelp_id : '開花屋-渋谷区'
 	          },
             {
               names : "Gamers",
               address : "1-14-7, Sotokanda, Chiyoda-ku, Tokyo, 101-0021",
               coords : {lat : 35.69835,lng : 139.7716411},
               category : "shop",
-              yelp_id : ""
             },
             {
               names : "Ichiran Shibuya",
               address : "1-22-7 Jinnan Sibuya-ku Tokyo-to 150-0041",
               coords : {lat : 35.6665006,lng : 139.6975192},
               category : "shop",
-              yelp_id : ""
             }];
 
 function local(dataObj){
@@ -149,7 +142,7 @@ function initMap(){
            // marker.addListener('click', toggleBounce)
 	          infoWindow.content = contentString;
 	          return function(){
-//              get_details(places[i])
+                get_details(places[i])
 	    	        infoWindow.open(map, marker);
                 // makes markers bounce on/off
                 if(marker.getAnimation() != null){
@@ -232,12 +225,12 @@ function wikiApi(places){
     }
   });
 }
-
+/*Remove
 function fourSquareApi(){
   /* fouraquare api
      args: place a location on a map
      return: a html li
-  */
+
   $details = $('#details');
   var foursquareURL = "https://api.foursquare.com/v2/venues/search"
   var  CLIENTID = "?client_id=AOYLTGMM0BHFXEN5CKON1LFIFJCYYT3VTOIUZIKCTNSP3BVG";
@@ -262,13 +255,15 @@ function fourSquareApi(){
       console.log(getmenu)
      })
     })
-}
+}*/
 
 function nonce_generate() {
     return (Math.floor(Math.random() * 1e12).toString());
 }
 
 function yelpApi() {
+    var $details = $('#details');
+    var yelpHTML = "";
     var yelp_consumer_key = "XPx515zsSylsRxPZZ2K5tg";
     var yelp_consumer_secret = "EsQ9fql9IL4XhxOijpP92o7Q92A";
     var yelp_token = "xN3TgEhTbYzWjk7g7wCz-U7is484UWoy";
@@ -297,7 +292,17 @@ function yelpApi() {
     jsonCallback: 'cb',
     success: function(data){
       console.log(data.businesses[0])
-      console.log("success")
+      console.log(data.businesses[0].name);
+      console.log(data.businesses[0].img_url)
+      yelpHTML = "<img src='"+data.businesses[0].image_url+"'><h1>"+
+      data.businesses[0].name+"</h1><img src='"+
+      data.businesses[0].rating_img_url+"'><p>Address: "+
+      data.businesses[0].location.display_address[0]+" "+data.businesses[0].location.display_address[1]+
+      "</p><p>"+data.businesses[0].location.display_address[2]+" "+data.businesses[0].location.display_address[3]+
+      " "+data.businesses[0].location.display_address[4]+"</p><p>phone number: "+data.businesses[0].phone+
+      "</p>Url: <a href='"+data.businesses[0].categories.url+"'>yelp page</a><h3>*"+data.businesses[0].snippet_text+"</h3>";
+      
+      $details.empty().append(yelpHTML);
     },
     error: function(error){
       console.log(error);
