@@ -1,4 +1,4 @@
-var map, markers = [], marker;
+var map, markers = [], marker, infoWindow;
 
 var places = [
               {
@@ -50,7 +50,6 @@ var viewModel = function(Map){
     });
 
     self.showPlaces = ko.computed(function(){
-    clearMarkers(null);
     var placesArray = [];
     var search = self.query().toLowerCase();
     var newArray = ko.utils.arrayFilter(self.allPlaces(), function(item){
@@ -90,21 +89,23 @@ function initMap(){
     nyTimesApi();
 
     this.makeMapMarker = function(places) {
+      clearMarkers();
       // place maps marker on the map
+      markers = [];
         marker = [];
-        for(i in places){
+        for(var i in places){
             marker = new google.maps.Marker({
             position: places[i].coords,
             map:map,
             animation: google.maps.Animation.Bounce,
             title: places[i].names
         });
-
+        console.log(i);
         google.maps.event.addListener(marker, 'click', (function(marker, i){
           // put infowindow and on/off for marker bounce
 	          var contentString = "<div>"+ marker.title + "</div>" + 
 	                        "<div>" + places[i].address + "</div>";
-	          var infoWindow = new google.maps.InfoWindow({
+	         var infoWindow = new google.maps.InfoWindow({
                 content : contentString,
                 closeBoxUrl: ""
             });
@@ -138,6 +139,7 @@ var changeMapCenter = function(places){
   // zooms and centers map
       map.setCenter({lat: places.coords.lat, lng: places.coords.lng});
       map.setZoom(10);
+      console.log(markers);
     }
 
 // apis
