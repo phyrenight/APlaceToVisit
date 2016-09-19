@@ -1,4 +1,4 @@
-var map, markers = [], marker, infoWindow;
+var map, markers = [], marker, infoWindows = [], last = -1;
 
 var places = [
               {
@@ -56,10 +56,10 @@ var viewModel = function(Map){
       if(item.names.toLowerCase().indexOf(search) > -1){
           var value = true
           placesArray.push(item);
-          Map.makeMapMarker(placesArray)
           return value;
        }
     });
+    Map.makeMapMarker(placesArray);
     return newArray;
 }, viewModel);
 };
@@ -97,11 +97,10 @@ function initMap(){
             marker = new google.maps.Marker({
             position: places[i].coords,
             map:map,
-            animation: google.maps.Animation.Bounce,
+            animation: null,
             title: places[i].names
         });
-        console.log(i);
-        google.maps.event.addListener(marker, 'click', (function(marker, i){
+        google.maps.event.addListener(marker, 'click', (function info(marker, i){
           // put infowindow and on/off for marker bounce
 	          var contentString = "<div>"+ marker.title + "</div>" + 
 	                        "<div>" + places[i].address + "</div>";
@@ -109,17 +108,11 @@ function initMap(){
                 content : contentString,
                 closeBoxUrl: ""
             });
-
 	          infoWindow.content = contentString;
 	          return function(){
                 get_details(places[i])
-	    	        infoWindow.open(map, marker);
-                // makes markers bounce on/off
-                if(marker.getAnimation() != null){
-                  marker.setAnimation(null);
-                }else{
-                  marker.setAnimation(google.maps.Animation.BOUNCE);
-                }
+                infoWindows[i] = infoWindow;
+                stopAnimation(i);
             }
         })(marker, i));
         markers.push(marker);
@@ -128,6 +121,23 @@ function initMap(){
     }
 }
 
+function stopAnimation(i){
+  if(last > -1){
+    infoWindows[last].close();
+    markers[last].setAnimation(null);
+  }
+  if(last != i){
+    infoWindows[i].open(map, markers[i]);
+    if(markers[i].getAnimation() != null){
+      markers[i].setAnimation(null);
+    }else{
+      markers[i].setAnimation(google.maps.Animation.BOUNCE);
+    }
+  }
+  last = i;
+}
+
+//}
 function clearMarkers(maps){
     // clears map markers
     for (var i = 0; i < markers.length; i++){
@@ -139,7 +149,6 @@ var changeMapCenter = function(places){
   // zooms and centers map
       map.setCenter({lat: places.coords.lat, lng: places.coords.lng});
       map.setZoom(10);
-      console.log(markers);
     }
 
 // apis
@@ -180,7 +189,6 @@ function wikiApi(places){
     dataType: 'jsonp',
     success: function(response) {
       var articleList = response[1];
-      console.log(response[3][0])  
       var url = "<a href='"+ response[3][0]+"'>"+response[1]+"</a>";
       var api = "<h4>Api used: Wikipedia</h4>"
       var description = "<p>"+response[2]+"</p>" 
