@@ -8,21 +8,9 @@ var places = [
               category : "tourist",
               },
               {
-	            names : "Akihabara",
-	            address : "Akihabara, Japan",
-	            coords : { lat : 35.7020691, lng : 139.7753269},
-              category : "tourist",
-              },
-              {
 	            names : "Nijo Castle",
 	            address : "541 Nijojocho, Nakagyo Ward, Kyoto, Kyoto Prefecture 604-8301, Japan",
               coords : { lat : 35.0130361, lng : 135.7503697},
-              category : "tourist",
-              },
-              {
-	            names : "Shibuya Crossing", // chase seen in fast and furious tokyo drift before Hanso death
-	            address : "2-29-1 Dogenzaka, Shibuya-ku, Tokyo, Japan",
-	            coords : { lat : 35.6595885, lng : 139.6986289},
               category : "tourist",
               },
               {
@@ -66,11 +54,7 @@ var viewModel = function(Map){
     var placesArray = [];
     var search = self.query().toLowerCase();
     var newArray = ko.utils.arrayFilter(self.allPlaces(), function(item){
-      console.log(item)
-      var d = item.names.toLowerCase().indexOf(search) >= 0;
-      console.log(d);
       if(item.names.toLowerCase().indexOf(search) > -1){
-          console.log(item.names.toLowerCase().indexOf(search));
           var value = true
           placesArray.push(item);
           Map.makeMapMarker(placesArray)
@@ -81,37 +65,23 @@ var viewModel = function(Map){
 }, viewModel);
 };
 
-
 function get_details(places) {
    // displays content to page based on places.category
-  //  console.log(places.names)
     if(places.category == "shop"){
-        console.log(places.names);
+        yelpApi(places);
+        changeMapCenter(places);
     }
     else if(places.category == "tourist"){
         wikiApi(places);
+        changeMapCenter(places);
     }
     else{
         nyTimesApi();
     }
 }
-/*
- //might need to change to ny , so i might need this
-function convertToCoords(address){
-	  console.log(address)
-	  url = "https://maps.googleapis.com/maps/api/geocode/json?address="+address+"&key=AIzaSyBTHibygVGMEj52ZJ2O2THkcn93bFc7YHM";
-
-    $.getJSON(url, function(data) {
-        var latt = data['results'][0]['geometry']['location']['lat'];
-        var longi = data['results'][0]['geometry']['location']['lng'];
-        console.log(latt);
-        console.log(longi);
-        initMap(latt, longi);
-    });
-}
-*/
 
 function initMap(){
+  // gets google map
     var mapDiv = document.getElementById('map')
     map = new google.maps.Map(mapDiv, {
         center: {lat : 36.204824 ,lng : 138.252924},
@@ -120,26 +90,25 @@ function initMap(){
     nyTimesApi();
 
     this.makeMapMarker = function(places) {
-        marker = []
+      // place maps marker on the map
+        marker = [];
         for(i in places){
-    //        console.log(places[i]);
             marker = new google.maps.Marker({
             position: places[i].coords,
             map:map,
             animation: google.maps.Animation.Bounce,
             title: places[i].names
         });
-        //marker.addListener('click', toggleBounce)
 
         google.maps.event.addListener(marker, 'click', (function(marker, i){
+          // put infowindow and on/off for marker bounce
 	          var contentString = "<div>"+ marker.title + "</div>" + 
 	                        "<div>" + places[i].address + "</div>";
 	          var infoWindow = new google.maps.InfoWindow({
                 content : contentString,
                 closeBoxUrl: ""
             });
-          //  marker.clicky = google.maps.event.addListener(marker, 'click', toggleBounce);
-           // marker.addListener('click', toggleBounce)
+
 	          infoWindow.content = contentString;
 	          return function(){
                 get_details(places[i])
@@ -153,29 +122,23 @@ function initMap(){
             }
         })(marker, i));
         markers.push(marker);
-       // markers[i].clicky = google.maps.event.addListener(markers[i], 'click', toggleBounce);
-        } 
+      } 
         marker.setMap(map)
     }
-  /*  toggleBounce = function(){
-      console.log("hello")
-        if (marker.getAnimation() !== null){
-            marker.setAnimation(null);
-        }else{
-            marker.setAnimation(google.maps.Animation.BOUNCE);
-        }
-   }*/
-
 }
 
-//Map.makeMapMarker(place)
 function clearMarkers(maps){
+    // clears map markers
     for (var i = 0; i < markers.length; i++){
-        //  console.log(i);
         markers[i].setMap(maps);
     }
-    // markers = []
 }
+
+var changeMapCenter = function(places){
+  // zooms and centers map
+      map.setCenter({lat: places.coords.lat, lng: places.coords.lng});
+      map.setZoom(10);
+    }
 
 // apis
 // nytimes api
@@ -201,8 +164,9 @@ function nyTimesApi(){
 
 //wikipedia
 function wikiApi(places){
-  var place = places.names
+  var place = places.names;
   var $details = $('#details');
+  $details.empty();
   var wikiRequestTimeout = setTimeout(function() {
     $details.text("failed to get wiki data");
   }, 8000);
@@ -214,54 +178,21 @@ function wikiApi(places){
     dataType: 'jsonp',
     success: function(response) {
       var articleList = response[1];
-
-      for(var i = 0; i < articleList.length; i++){
-        articleStr = articleList[i];
-        var url = 'http://en.wikipedia.org/wiki/' + articleStr;
-        $details.empty().append('<a href="' + url + '">' + articleStr +
-                         '</a><hr>');
-      };
+      console.log(response[3][0])  
+      var url = "<a href='"+ response[3][0]+"'>"+response[1]+"</a>";
+      var api = "<h4>Api used: Wikipedia</h4>"
+      var description = "<p>"+response[2]+"</p>" 
+      $details.append(api+url+description);
       clearTimeout(wikiRequestTimeout);
     }
   });
 }
-/*Remove
-function fourSquareApi(){
-  /* fouraquare api
-     args: place a location on a map
-     return: a html li
-
-  $details = $('#details');
-  var foursquareURL = "https://api.foursquare.com/v2/venues/search"
-  var  CLIENTID = "?client_id=AOYLTGMM0BHFXEN5CKON1LFIFJCYYT3VTOIUZIKCTNSP3BVG";
-  var CLIENTSECRET = "&client_secret=YXUWA5QW3LEF1HNJYHS0FAGDWQHHKPSW0WNL0R5O0PEGOV4L";
-  var version = "&v=20130815"
-  var longLatt = "&ll=35.0130361,135.7503697";
-  var query= "&query=Nijo castle"
-  var FQURL = foursquareURL + CLIENTID + CLIENTSECRET + version + longLatt + query;  
-
-  $.getJSON(FQURL, function(data){
-    var i = 0;
-    console.log("byebye")
-    console.log(data['response']['venues'][0])
-    var venue_id = data['response']['venues'][0]['id']
-    console.log(venue_id);
-    var FQMenuURL = "https://api.foursquare.com/v2/venues/" + venue_id + "/menu"
-    
-    var redirect = "https://localhost:8000"
-    fourvenue = "https://foursquare.com/v2/venues/"+venue_id;//"?client_id="+
-                //CLIENTID + "&response_type=JSON&redirect_uri="+ redirect;
-    $.getJSON(fourvenue, function(getmenu){
-      console.log(getmenu)
-     })
-    })
-}*/
-
+//random generator used for Yelp api
 function nonce_generate() {
     return (Math.floor(Math.random() * 1e12).toString());
 }
-
-function yelpApi() {
+//Yelp 
+function yelpApi(places) {
     var $details = $('#details');
     var yelpHTML = "";
     var yelp_consumer_key = "XPx515zsSylsRxPZZ2K5tg";
@@ -271,7 +202,7 @@ function yelpApi() {
     var yelpURL  = "https://api.yelp.com/v2/search?";
 
     parameters = {
-      term: 'Kaikaya',
+      term: places.names,
       location: 'japan',
       oauth_consumer_key : yelp_consumer_key,
       oauth_token : yelp_token,
@@ -283,7 +214,6 @@ function yelpApi() {
     }
     var EncodeSignature = oauthSignature.generate('GET', yelpURL, parameters, yelp_consumer_secret, yelp_token_secret);
     parameters.oauth_signature = EncodeSignature;  
-    console.log(EncodeSignature)
     var setting = {
     url: yelpURL,
     data:parameters,
@@ -291,9 +221,6 @@ function yelpApi() {
     dataType: 'jsonp',
     jsonCallback: 'cb',
     success: function(data){
-      console.log(data.businesses[0])
-      console.log(data.businesses[0].name);
-      console.log(data.businesses[0].img_url)
       yelpHTML = "<img src='"+data.businesses[0].image_url+"'><h1>"+
       data.businesses[0].name+"</h1><img src='"+
       data.businesses[0].rating_img_url+"'><p>Address: "+
@@ -310,11 +237,6 @@ function yelpApi() {
    }
    $.ajax(setting);
 }
-//fourSquareApi()
-//wikiApi()
-// nyTimesApi()
- yelpApi()
-
 
 var start = function() {
 
