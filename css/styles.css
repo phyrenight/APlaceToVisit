@@ -1,0 +1,8 @@
+#placeMenu {
+  z-index:1000000;
+  position:absolute;
+}
+#placeMenu ul {
+  list-style-type: none;
+  list-style-image: none;
+}

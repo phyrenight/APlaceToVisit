@@ -7,13 +7,16 @@
     <meta name="viewport" content="width='device=width initial-scale=1">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
     <script rel="text/javascript" src="libs/knockout.js"></script>
-   <script rel="text/javascript" src="libs/oauth-signature.min.js"></script>
+    <script rel="text/javascript" src="libs/oauth-signature.min.js"></script>
+        <script rel="text/javascript" src="libs/jsScripts.js"></script>
+
     <style>
-    #map {
-    	width: 100%;
-    	height: 400px;
-    }
+      #map {
+    	  width: 100%;
+    	  height: 400px;
+      }
     </style>
   </head>
   <body>
@@ -25,32 +28,27 @@
       </div>
     </header>
     <article>
-    <section id="placeMenu">
+      <section id="placeMenu">
         <label class="col-xs-1 col-xs-offset-4 col-sm-1 col-sm-offset-4 col-md-1 col-md-offset-4 col-lg-1 col-lg-offset-4">Search:</label>
         <input type="search" placeholder="Search" data-bind="value:query, textInput: query" class="col-xs-2 col-sm-2  col-md-2 col-lg-2"/>
-      <!--<section data-bind="foreach: allPlaces">
-        <p data-bind="text: names"></p>
-      </section>-->
         <ul data-bind="template: {name:'place', foreach:showPlaces}" class="col-xs-2 col-xs-offset-5 col-sm-2 col-sm-offset-5 col-md-2 col-md-offset-5 col-lg-2 col-lg-offset-5"></ul>
-            <script type="text/html" id='place'>
-                <li>
-                    <span data-bind="text: names, click: get_details"></span>
-                </li>
-            </script>
-    </section>
+          <script type="text/html" id='place'>
+            <li>
+              <span data-bind="text: names, click: get_details"></span>
+            </li>
+          </script>
+      </section>
       <div id="map">
       </div>
       <section class="details container">
         <div class="row">
           <h2>Details: </h2>
         </div>
-          <div id="details">
-          </div>
+        <div id="details">
+        </div>
       </section>
     </article>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTHibygVGMEj52ZJ2O2THkcn93bFc7YHM&callback=start">
-    </script>
-    <script rel="text/javascript" src="libs/jsScripts.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTHibygVGMEj52ZJ2O2THkcn93bFc7YHM&callback=start"></script>
         <script rel="text/javascript" src="libs/hamburgerMenu.js"></script>
   </body>
 </html>
