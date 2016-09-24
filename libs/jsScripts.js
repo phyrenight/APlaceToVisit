@@ -1,5 +1,5 @@
 
-var map, marker, last = -1;
+var map;
 
 var places = [
               {
@@ -66,6 +66,13 @@ var ViewModel = function(Map){
     self.allPlaces.marker.push(Map.makeMapMarker(place))
     console.log(self.allPlaces())
   });*/
+  self.doSomething = function(place){
+    console.log(place);
+    console.log(place.infowindow);
+    var marker = place.marker;
+    place.infowindow.open(map, marker);
+    markerAnimation(place.marker);
+  }
 
   self.showPlaces = ko.computed(function(){
   var placesArray = [];
@@ -109,7 +116,7 @@ function initMap(){
   this.makeMapMarker = function(places) {
    // clearMarkers();
     // place maps marker on the map
-   // markers = [];
+
     marker = [];
   //  for(var i in places){
       marker = new google.maps.Marker({
@@ -161,8 +168,8 @@ function initMap(){
     return infoWindow;
   }
 }
-function markerAnimation(marker){
-  console.log("hello")
+  var markerAnimation = function(marker){
+  console.log(marker)
   if(marker.getAnimation() != null){
     marker.setAnimation(null);
   }else{
