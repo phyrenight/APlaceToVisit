@@ -1,5 +1,5 @@
 
-var map, markers = [], marker, infoWindows = [], last = -1;
+var map, marker, last = -1;
 
 var places = [
               {
@@ -39,6 +39,8 @@ function Local(dataObj){
   self.address = dataObj.address;
   self.coords = dataObj.coords;
   self.category = dataObj.category;
+  self.marker = "";
+  self.infowindow = "";
 }
 
 var ViewModel = function(Map){
@@ -49,6 +51,21 @@ var ViewModel = function(Map){
   places.forEach(function(place){
     self.allPlaces.push(new Local(place))
   });
+  
+  for(var i = 0; i < (places.length); i++){
+    self.allPlaces()[i].marker = Map.makeMapMarker(places[i]);
+    console.log(self.allPlaces())
+  }
+
+    for(var i = 0; i < (places.length); i++){
+    self.allPlaces()[i].infowindow = Map.makeInfoWindow(allPlaces()[i]);
+    console.log(self.allPlaces())
+  }
+
+  /*places.forEach(function(place){
+    self.allPlaces.marker.push(Map.makeMapMarker(place))
+    console.log(self.allPlaces())
+  });*/
 
   self.showPlaces = ko.computed(function(){
   var placesArray = [];
@@ -63,9 +80,9 @@ var ViewModel = function(Map){
     Map.makeMapMarker(placesArray);
     return newArray;
   }, ViewModel);
-};
+}
 
-function get_details(places) {
+/*function get_details(places) {
   // displays content to page based on places.category
   if(places.category == "shop"){
     yelpApi(places);
@@ -78,7 +95,7 @@ function get_details(places) {
   else{
     nyTimesApi();
   }
-}
+}*/
 
 function initMap(){
   // gets google map
@@ -87,42 +104,73 @@ function initMap(){
     center: {lat : 36.204824 ,lng : 138.252924},
     zoom: 6
   });
-  nyTimesApi();
+ // nyTimesApi();
 
   this.makeMapMarker = function(places) {
-    clearMarkers();
+   // clearMarkers();
     // place maps marker on the map
-    markers = [];
+   // markers = [];
     marker = [];
-    for(var i in places){
+  //  for(var i in places){
       marker = new google.maps.Marker({
-        position: places[i].coords,
+        position: places.coords,
         map:map,
         animation: null,
-        title: places[i].names
+        title: places.names
       });
-      google.maps.event.addListener(marker, 'click', (function info(marker, i){
+     /* google.maps.event.addListener(marker, 'click', (function info(marker){
         // put infowindow and on/off for marker bounce
         var contentString = "<div>"+ marker.title + "</div>" + 
-                          "<div>" + places[i].address + "</div>";
+                          "<div>" + places.address + "</div>";
         var infoWindow = new google.maps.InfoWindow({
           content : contentString,
           closeBoxUrl: ""
         });
+        console.log("hello");
         infoWindow.content = contentString;
         return function(){
-          get_details(places[i])
-          infoWindows[i] = infoWindow;
-          stopAnimation(i);
+        //  get_details(places[i])
+          infoWindows = infoWindow;
+      //    stopAnimation(i);
         }
-      })(marker, i));
-      markers.push(marker);
-    } 
+      })(marker));*/
+    //  markers.push(marker);
+    //} 
+    //marker.setAnimation(google.maps.Animation.BOUNCE);
     marker.setMap(map)
+    return marker;
+  }
+  this.makeInfoWindow = function(place){
+    var marker = place.marker
+    var infoWindow;
+    google.maps.event.addListener(marker, 'click', (function info(marker){
+    // put infowindow and on/off for marker bounce
+      var contentString = "<div>"+ marker.title + "</div>" + 
+                        "<div>" + place.address + "</div>";
+      infoWindow = new google.maps.InfoWindow({
+        content : contentString,
+        closeBoxUrl: ""
+      });
+      infoWindow.content = contentString;
+      return function(){
+        //  get_details(places[i])
+        infoWindow.open(map, marker);
+            markerAnimation(marker);
+      }
+    })(marker));
+    return infoWindow;
+  }
+}
+function markerAnimation(marker){
+  console.log("hello")
+  if(marker.getAnimation() != null){
+    marker.setAnimation(null);
+  }else{
+    marker.setAnimation(google.maps.Animation.BOUNCE);
   }
 }
 
-function stopAnimation(i){
+/*function stopAnimation(i){
   //starts and stops animation
   if(last > -1){
     infoWindows[last].close();
@@ -243,7 +291,7 @@ function yelpApi(places) {
     }
   }
   $.ajax(setting);
-}
+}*/
 var start = function() {
   var Map = new initMap();
   var viewModel = ViewModel(Map)
