@@ -1,5 +1,5 @@
 
-var map;
+var map, lastMarker  = null;
 
 var places = [
               {
@@ -67,11 +67,7 @@ var ViewModel = function(Map){
     console.log(self.allPlaces())
   });*/
   self.doSomething = function(place){
-    console.log(place);
-    console.log(place.infowindow);
-    var marker = place.marker;
-    place.infowindow.open(map, marker);
-    markerAnimation(place.marker);
+    markerAnimation(place);
   }
 
   self.showPlaces = ko.computed(function(){
@@ -161,53 +157,46 @@ function initMap(){
       infoWindow.content = contentString;
       return function(){
         //  get_details(places[i])
-        infoWindow.open(map, marker);
-            markerAnimation(marker);
+        //infoWindow.open(map, marker);
+            markerAnimation(place);
       }
     })(marker));
     return infoWindow;
   }
 }
-  var markerAnimation = function(marker){
+
+var markerAnimation = function(place){
+  var marker = place.marker;
   console.log(marker)
   if(marker.getAnimation() != null){
+    place.infowindow.close();
     marker.setAnimation(null);
   }else{
-    marker.setAnimation(google.maps.Animation.BOUNCE);
-  }
-}
-
-/*function stopAnimation(i){
-  //starts and stops animation
-  if(last > -1){
-    infoWindows[last].close();
-    markers[last].setAnimation(null);
-  }
-  if(last != i){
-    infoWindows[i].open(map, markers[i]);
-    if(markers[i].getAnimation() != null){
-      markers[i].setAnimation(null);
-    }else{
-      markers[i].setAnimation(google.maps.Animation.BOUNCE);
+    if(lastMarker != null){
+      lastMarker.infowindow.close();
+      lastMarker.marker.setAnimation(null);
     }
+  place.infowindow.open(map, marker);
+  marker.setAnimation(google.maps.Animation.BOUNCE);
+  changeMapCenter(place)
+  lastMarker = place
   }
-  last = i;
 }
 
-
+/*
 function clearMarkers(maps){
   // clears map markers
   for (var i = 0; i < markers.length; i++){
     markers[i].setMap(maps);
   }
 }
-
-var changeMapCenter = function(places){
+*/
+var changeMapCenter = function(place){
   // zooms and centers map
-  map.setCenter({lat: places.coords.lat, lng: places.coords.lng});
+  map.setCenter({lat: place.coords.lat, lng: place.coords.lng});
   map.setZoom(10);
 }
-
+/*
 // apis
 // nytimes api
 function nyTimesApi(){
