@@ -34,7 +34,7 @@
         <ul data-bind="template: {name:'place', foreach:showPlaces}" class="col-xs-2 col-xs-offset-5 col-sm-2 col-sm-offset-5 col-md-2 col-md-offset-5 col-lg-2 col-lg-offset-5"></ul>
           <script type="text/html" id='place'>
             <li>
-              <span data-bind="text: names, click: doSomething"></span>
+              <span data-bind="text: names, click: get_details"></span>
             </li>
           </script>
       </section>
@@ -44,7 +44,7 @@
         <div class="row">
           <h2>Details: </h2>
         </div>
-        <div id="details">
+        <div data-bind="html: apiDetails" id="details">
         </div>
       </section>
     </article>
