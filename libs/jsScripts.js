@@ -44,9 +44,10 @@ function Local(dataObj){
 
   this.get_details = function() {
   // displays content to page based on places.category
+  data = {marker: self.marker, coords: self.coords, infowindow: self.infowindow};
   if(self.category == "shop"){
     yelpApi(self.names);
-   // markerAnimation(Local);
+    markerAnimation(data);
    // changeMapCenter(places);
   }
   else if(self.category == "tourist"){
@@ -73,12 +74,10 @@ var ViewModel = function(Map){
   
   for(var i = 0; i < (places.length); i++){
     self.allPlaces()[i].marker = Map.makeMapMarker(places[i]);
-    console.log(self.allPlaces())
   }
 
   for(var i = 0; i < (places.length); i++){
     self.allPlaces()[i].infowindow = Map.makeInfoWindow(self.allPlaces()[i]);
-    console.log(self.allPlaces())
   }
 
   /*places.forEach(function(place){
@@ -186,6 +185,7 @@ function initMap(){
 }
 
 var markerAnimation = function(place){
+  console.log(place);
   var marker = place.marker;
   if(marker.getAnimation() != null){
     place.infowindow.close();
