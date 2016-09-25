@@ -1,4 +1,3 @@
-
 var map, viewModel, lastMarker = null;
 
 var places = [
@@ -44,20 +43,17 @@ function Local(dataObj){
 
   this.get_details = function() {
   // displays content to page based on places.category
-  data = {marker: self.marker, coords: self.coords, infowindow: self.infowindow};
+  var data = {marker: self.marker, coords: self.coords, infowindow: self.infowindow};
   if(self.category == "shop"){
     yelpApi(self.names);
-    markerAnimation(data);
-   // changeMapCenter(places);
   }
   else if(self.category == "tourist"){
-    data = wikiApi(self.names);
-    self.apiDetails = ko.observable("hello");
-   // changeMapCenter(places);
+    wikiApi(self.names);
   }
   else{
     nyTimesApi();
   }
+  markerAnimation(data);
 }
 
 }
@@ -65,37 +61,26 @@ function Local(dataObj){
 var ViewModel = function(Map){
   var self = this;
   self.query = ko.observable("");
-  self.apiDetails = ko.observable("<h1>hello</h1>")
+  self.apiDetails = ko.observable("<h1>hello</h1>");
 
   self.allPlaces = ko.observableArray();
   places.forEach(function(place){
-    self.allPlaces.push(new Local(place))
+    self.allPlaces.push(new Local(place));
   });
-  
-  for(var i = 0; i < (places.length); i++){
+
+  for(let i = 0; i < (places.length); i++){
     self.allPlaces()[i].marker = Map.makeMapMarker(places[i]);
   }
 
-  for(var i = 0; i < (places.length); i++){
+  for(let i = 0; i < (places.length); i++){
     self.allPlaces()[i].infowindow = Map.makeInfoWindow(self.allPlaces()[i]);
   }
 
-  /*places.forEach(function(place){
-    self.allPlaces.marker.push(Map.makeMapMarker(place))
-    console.log(self.allPlaces())
-  });*/
-
- /* function doSomething(place){
-    markerAnimation(place);
-    place.get_details();
-  }*/
-
   self.showPlaces = ko.computed(function(){
-  var placesArray = [];
   var search = self.query().toLowerCase();
     var newArray = ko.utils.arrayFilter(self.allPlaces(), function(item){
       if(item.names.toLowerCase().indexOf(search) > -1){
-        var value = true
+        var value = true;
         item.marker.setVisible(true);
         return value;
       }else{
@@ -105,25 +90,10 @@ var ViewModel = function(Map){
     return newArray;
   }, ViewModel);
 }
-/*DELETE
-function get_details(places) {
-  // displays content to page based on places.category
-  if(places.category == "shop"){
-    yelpApi(places);
-    changeMapCenter(places);
-  }
-  else if(places.category == "tourist"){
-    wikiApi(places);
-    changeMapCenter(places);
-  }
-  else{
-    nyTimesApi();
-  }
-}*/
 
 function initMap(){
   // gets google map
-  var mapDiv = document.getElementById('map')
+  var mapDiv = document.getElementById("map");
   map = new google.maps.Map(mapDiv, {
     center: {lat : 36.204824 ,lng : 138.252924},
     zoom: 6
@@ -132,42 +102,23 @@ function initMap(){
 
   this.makeMapMarker = function(places) {
     // place maps marker on the map
-
     marker = [];
-      marker = new google.maps.Marker({
-        position: places.coords,
-        map:map,
-        animation: null,
-        title: places.names
-      });
-     /*DELETE google.maps.event.addListener(marker, 'click', (function info(marker){
-        // put infowindow and on/off for marker bounce
-        var contentString = "<div>"+ marker.title + "</div>" + 
-                          "<div>" + places.address + "</div>";
-        var infoWindow = new google.maps.InfoWindow({
-          content : contentString,
-          closeBoxUrl: ""
-        });
-        console.log("hello");
-        infoWindow.content = contentString;
-        return function(){
-        //  get_details(places[i])
-          infoWindows = infoWindow;
-      //    stopAnimation(i);
-        }
-      })(marker));*/
-    //  markers.push(marker);
-    //} 
-    //marker.setAnimation(google.maps.Animation.BOUNCE);
-    marker.setMap(map)
+    marker = new google.maps.Marker({
+      position: places.coords,
+      map:map,
+      animation: null,
+      title: places.names
+    });
+
+    marker.setMap(map);
     return marker;
   }
   this.makeInfoWindow = function(place){
-    var marker = place.marker
+    var marker = place.marker;
     var infoWindow;
-    google.maps.event.addListener(marker, 'click', (function info(marker){
+    google.maps.event.addListener(marker, "click", (function info(marker){
     // put infowindow and on/off for marker bounce
-      var contentString = "<div>"+ marker.title + "</div>" + 
+      var contentString = "<div>"+ marker.title + "</div>" +
                         "<div>" + place.address + "</div>";
       infoWindow = new google.maps.InfoWindow({
         content : contentString,
@@ -175,8 +126,6 @@ function initMap(){
       });
       infoWindow.content = contentString;
       return function(){
-        //  get_details(places[i])
-            markerAnimation(place);
             place.get_details();
       }
     })(marker));
@@ -185,20 +134,19 @@ function initMap(){
 }
 
 var markerAnimation = function(place){
-  console.log(place);
   var marker = place.marker;
-  if(marker.getAnimation() != null){
+  if(marker.getAnimation() !== null){
     place.infowindow.close();
     marker.setAnimation(null);
   }else{
-    if(lastMarker != null){
+    if(lastMarker !== null){
       lastMarker.infowindow.close();
       lastMarker.marker.setAnimation(null);
     }
     place.infowindow.open(map, marker);
     marker.setAnimation(google.maps.Animation.BOUNCE);
-    changeMapCenter(place)
-    lastMarker = place
+    changeMapCenter(place);
+    lastMarker = place;
   }
 }
 
@@ -211,32 +159,30 @@ var changeMapCenter = function(place){
 // apis
 // nytimes api
 function nyTimesApi(){
-  nyTimesURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
-  nyTimesURL += '?' + $.param({"api-key": "b30fd01ee378467091f2076b2edc1c07",
-                             'q': "Japan"});
-  $.getJSON(nyTimesURL, function(nyData){//, textStat, XMLHttpRequest){
+  var nyTimesURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+  nyTimesURL += "?" + $.param({"api-key": "b30fd01ee378467091f2076b2edc1c07",
+                             "q": "Japan"});
+  $.getJSON(nyTimesURL, function(nyData){
      // display(response)
       var i = 0;
       var nyLinks = [];
       nyLinks.push("<h4>Api used: Ny Times");
-      while(i < nyData['response']['docs'].length){
-        content = nyData['response']['docs'][i];
-        nyLinks.push("<li class=''><a href='"+ content['web_url']+
-        "'target='_blank'>"+ content['headline']['main']+"</a><p>"
-        +content['snippet']+"</p></li>");
+      while(i < nyData.response.docs.length){
+        content = nyData.response.docs[i];
+        nyLinks.push("<li class=''><a href='"+ content.web_url+
+        "'target='_blank'>"+ content.headline.main+"</a><p>"+
+        content.snippet+"</p></li>");
         i += 1;
       viewModel.apiDetails(nyLinks);
       }
-  }).error( function() { 
-    alert("Ny times can not load data.")
+  }).error( function() {
+    alert("Ny times can not load data.");
   });
 }
 
 //wikipedia
 
 function wikiApi(place){
-  //var $details = $('#details');
-  //$details.empty();
   var wikiRequestTimeout = setTimeout(function() {
     alert("failed to get wiki data");
   }, 8000);
@@ -245,17 +191,15 @@ function wikiApi(place){
   place +"&format=json&callback=wikiCallback";
   $.ajax({
     url: wikiURL,
-    dataType: 'jsonp',
+    dataType: "jsonp",
     success: function(response){
-      var articleList = response[1];
       var url = "<a href='"+ response[3][0]+"'>"+response[1]+"</a>";
-      var api = "<h4>Api used: Wikipedia</h4>"
-      var description = "<p>"+response[2]+"</p>" 
+      var api = "<h4>Api used: Wikipedia</h4>";
+      var description = "<p>"+response[2]+"</p>";
       var data = api+url+description;
       clearTimeout(wikiRequestTimeout);
-      console.log(data);
       viewModel.apiDetails(data);
-    }   
+    }
   });
 }
 
@@ -263,14 +207,14 @@ function wikiApi(place){
 function nonce_generate() {
   return (Math.floor(Math.random() * 1e12).toString());
 }
-//Yelp 
+//Yelp
 function yelpApi(place) {
 
   var yelpHTML = "";
 
-  parameters = {
+  var parameters = {
     term: place,
-    location: 'japan',
+    location: "japan",
     oauth_consumer_key : yelp_consumer_key,
     oauth_token : yelp_token,
     oauth_signature_method : "HMAC-SHA1",
@@ -278,17 +222,17 @@ function yelpApi(place) {
     oauth_nonce : nonce_generate(),
     oauth_version: "1.0",
     callback: "cb"
-  }
-  var EncodeSignature = oauthSignature.generate('GET', yelpURL, parameters, yelp_consumer_secret, yelp_token_secret);
-  parameters.oauth_signature = EncodeSignature;  
+  };
+  var EncodeSignature = oauthSignature.generate("GET", yelpURL, parameters, yelp_consumer_secret, yelp_token_secret);
+  parameters.oauth_signature = EncodeSignature;
   var setting = {
     url: yelpURL,
     data:parameters,
     cache: true,
-    dataType: 'jsonp',
-    jsonCallback: 'cb',
+    dataType: "jsonp",
+    jsonCallback: "cb",
     success: function(response){
-      apiUsed = "<h4>Api used: Yelp!</h4>";
+      var apiUsed = "<h4>Api used: Yelp!</h4>";
       yelpHTML = apiUsed+"<img src='"+response.businesses[0].image_url+"'><h1>"+
       response.businesses[0].name+"</h1><img src='"+
       response.businesses[0].rating_img_url+"'><p>Address: "+
@@ -306,6 +250,6 @@ function yelpApi(place) {
 }
 var start = function() {
   var Map = new initMap();
-  viewModel = new ViewModel(Map)
+  viewModel = new ViewModel(Map);
   ko.applyBindings(viewModel);
 }
