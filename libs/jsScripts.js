@@ -54,14 +54,15 @@ function Local(dataObj){
     nyTimesApi();
   }
   markerAnimation(data);
-}
+};
 
 }
 
 var ViewModel = function(Map){
   var self = this;
   self.query = ko.observable("");
-  self.apiDetails = ko.observable("<h1>hello</h1>");
+  self.apiDetails = ko.observable();
+  self.apiError = ko.observable(false);
 
   self.allPlaces = ko.observableArray();
   places.forEach(function(place){
@@ -89,7 +90,7 @@ var ViewModel = function(Map){
     });
     return newArray;
   }, ViewModel);
-}
+};
 
 function initMap(){
   // gets google map
@@ -112,7 +113,7 @@ function initMap(){
 
     marker.setMap(map);
     return marker;
-  }
+  };
   this.makeInfoWindow = function(place){
     var marker = place.marker;
     var infoWindow;
@@ -127,10 +128,10 @@ function initMap(){
       infoWindow.content = contentString;
       return function(){
             place.get_details();
-      }
+      };
     })(marker));
     return infoWindow;
-  }
+  };
 }
 
 var markerAnimation = function(place){
@@ -148,17 +149,20 @@ var markerAnimation = function(place){
     changeMapCenter(place);
     lastMarker = place;
   }
-}
+};
 
 var changeMapCenter = function(place){
   // zooms and centers map
   map.setCenter({lat: place.coords.lat, lng: place.coords.lng});
   map.setZoom(10);
-}
+};
 
 // apis
 // nytimes api
 function nyTimesApi(){
+  var nyTimesTimeout = setTimeout(function(){
+    alert("Ny Times api failed to load.");
+  }, 8000);
   var nyTimesURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
   nyTimesURL += "?" + $.param({"api-key": "b30fd01ee378467091f2076b2edc1c07",
                              "q": "Japan"});
@@ -173,18 +177,17 @@ function nyTimesApi(){
         "'target='_blank'>"+ content.headline.main+"</a><p>"+
         content.snippet+"</p></li>");
         i += 1;
+        clearTimeout(nyTimesTimeout);
       viewModel.apiDetails(nyLinks);
       }
-  }).error( function() {
-    alert("Ny times can not load data.");
-  });
+  })
 }
 
 //wikipedia
 
 function wikiApi(place){
   var wikiRequestTimeout = setTimeout(function() {
-    alert("failed to get wiki data");
+    alert("Wiki api did not load.");
   }, 8000);
 
   var wikiURL = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" +
@@ -245,11 +248,11 @@ function yelpApi(place) {
     error: function(error){
       alert(error);
     }
-  }
+  };
   $.ajax(setting);
 }
 var start = function() {
   var Map = new initMap();
   viewModel = new ViewModel(Map);
   ko.applyBindings(viewModel);
-}
+};

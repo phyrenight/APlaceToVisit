@@ -4,14 +4,10 @@
     <title>Places I want to visit</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width='device=width initial-scale=1">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <meta name="viewport" content="width=device=width, initial-scale=1">
+    <script src="libs/jquery-3.1.1.min.js"></script>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
-    <script rel="text/javascript" src="libs/knockout.js"></script>
-    <script rel="text/javascript" src="libs/oauth-signature.min.js"></script>
-    <script rel="text/javascript" src="libs/settings.js"></script>
-    <script rel="text/javascript" src="libs/jsScripts.js"></script>
     <style>
       #map {
     	  width: 100%;
@@ -43,12 +39,17 @@
       <section class="details container">
         <div class="row">
           <h2>Details: </h2>
+          <h5 data-bind="visible: apiError">Error api failed to load!</h5>
         </div>
         <div data-bind="html: apiDetails" id="details">
         </div>
       </section>
     </article>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTHibygVGMEj52ZJ2O2THkcn93bFc7YHM&callback=start"></script>
-        <script rel="text/javascript" src="libs/hamburgerMenu.js"></script>
+    <script rel="text/javascript" src="libs/knockout.js"></script>
+    <script rel="text/javascript" src="libs/oauth-signature.min.js"></script>
+    <script rel="text/javascript" src="libs/settings.js"></script>
+    <script rel="text/javascript" src="libs/jsScripts.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAszMSTUeU2W6069VFqaDZtGG_4Ahk0-k&callback=start"></script>
+    <script rel="text/javascript" src="libs/hamburgerMenu.js"></script>
   </body>
 </html>
