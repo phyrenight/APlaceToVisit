@@ -1,32 +1,28 @@
 h1 {
-	font-size:1.8rem;
+  font-size:1.8rem;
 }
 
 @media(min-width: 400px){
-	h1{
-		font-size:2.1rem;
-	}
+  h1{
+    font-size:2.1rem;
+  }
 }
 @media(min-width: 600px){
-	h1{
-		font-size:2.1rem;
-	}
+  h1{
+    font-size:2.1rem;
+  }
 }
 @media(min-width:800px){
-	h1{
-		font-size:2.7rem;
-	}
+  h1{
+    font-size:2.7rem;
+  }
 }
 @media(min-width:1000px){
-	h1{
-		font-size: 3.0rem;
-	}
+  h1{
+    font-size: 3.0rem;
+  }
+}      
+#map {
+  width: 100%;
+  height: 400px;
 }
-/*#placeMenu {
-  z-index:1000000;
-  position:absolute;
-}
-#placeMenu ul {
-  list-style-type: none;
-  list-style-image: none;
-}*/
