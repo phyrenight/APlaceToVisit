@@ -256,3 +256,7 @@ var start = function() {
   viewModel = new ViewModel(Map);
   ko.applyBindings(viewModel);
 };
+var mapError = function(){
+  // Used to handle google map's loading error
+  alert("Google maps failed to load.")
+}
