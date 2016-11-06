@@ -30,3 +30,36 @@ h1 {
 .switch{
   margin-left: 45%;
 }
+
+label, ul {
+  margin-left: 3%;
+}
+@media(min-width:320px){
+  label, ul {
+    margin-left:12%;
+  }
+}
+
+@media(min-width:360px){
+  label, ul{
+    margin-left:12%;
+  }
+}
+
+@media(min-width:480px){
+  label, ul {
+    margin-left:25%;
+  }
+}
+
+@media(min-width:720px){
+  label, ul {
+    margin-left:34%;
+  }
+}
+
+@media(min-width:1000px){
+  label, ul {
+    margin-left:40%;
+  }
+}

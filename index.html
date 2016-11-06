@@ -13,14 +13,14 @@
     <header class="container">
       <div class="row">
         <h1 class="text-center">Places to visit in Japan</h1>
-        <div class="switch col-xs-1 col-sm-1 col-md-1 col-lg-1"><button class="hamburger btn">&#9776;</button></div>
-        <div class="switch col-xs-1 col-sm-1 col-md-1 col-lg-1"><button class="cross btn"><span>X</span></button></div>
+        <div class="switch col-xs-1 col-sm-1 col-md-1 col-lg-1"><button class="hamburger btn btn-primary">&#9776;</button></div>
+        <div class="switch col-xs-1 col-sm-1 col-md-1 col-lg-1"><button class="cross btn btn-primary"><span>X</span></button></div>
       </div>
     </header>
     <article>
       <section id="placeMenu">
-        <label class="text-center label">Search:</label>
-        <input type="search" placeholder="Search" data-bind="value:query, textInput: query" class="text-center input"/>
+        <label class="text-center">Search:</label>
+        <input type="search" placeholder="Search" data-bind="value:query, textInput: query" class="text-center"/>
         <ul data-bind="template: {name:'place', foreach:showPlaces}" class="slider"></ul>
           <script type="text/html" id='place'>
             <li>
